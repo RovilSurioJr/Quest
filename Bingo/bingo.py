@@ -68,7 +68,7 @@ class Phrase:
         bingo_template.save("{}/{}.PNG".format(directory, name), format= 'PNG')
         print("Bingo Card successfully saved, Filename: {} at {}".format(name, directory))
         print("\n")
-
+        
         if not os.path.exists(directory):
             os.makedirs(directory)
 
@@ -89,7 +89,7 @@ class Phrases:
             except ValueError:
                 print("Please input a valid integer! Please try again!")
         
-        invalid_characters = ['/',':','?','<','>','|',]
+        invalid_characters = ['/',':','?','<','>','|']
         invalid_char_input = []
         
         open_file_flag = False
@@ -132,7 +132,12 @@ class Phrases:
                 open_tempfile_flag = False
                 print(e)
                 
-        directory = input(str("Choose the file path in where the image will be saved: "))
+        choice = input("Specify where to save the image(y) or save it to the output folder(n)")
+        choice = choice.lower()
+        if choice == 'y':
+            directory = input(str("Choose the file path in where the image will be saved: "))
+        else:
+            directory =  os.path.dirname(__file__)+ '\output'
         print("\n")
         f_n = 0
         for i in range(number_of_card_to_be_added):
