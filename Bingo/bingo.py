@@ -10,12 +10,12 @@ class Phrase:
         duplicate_checker = [] # For avoiding duplication
         final_phrases = [] # For text wrapping
 
-        font_style = ImageFont.truetype("Roboto-Medium.ttf",size = 30)
+        font_style = ImageFont.truetype("Roboto-Medium.ttf",size = 40)
         bingo_template = Image.open("{}.PNG".format(bingocard_filename))
         draw = ImageDraw.Draw(bingo_template)
-        x = 150
-        y1 = 740
-        y2 = 790
+        x = 350
+        y1 = 790
+        y2 = 840
 
         while len(bingo_card) != 9:
             with open("{}.txt".format(file_name), 'r') as file:
@@ -30,7 +30,7 @@ class Phrase:
                   #,bingo_card)
 
         for p in bingo_card:
-            line_wrapped = TW.wrap(p,width = 30)
+            line_wrapped = TW.wrap(p,width = 20)
             final_phrases.append(line_wrapped)
 
         for line in final_phrases:
@@ -38,11 +38,11 @@ class Phrase:
             if y1 <= 1650 and y2 <= 1700:
 
                 if len(line) > 1:
-                    draw.text((x,y1),line[0],font = font_style,fill = "black",align = "center")
-                    draw.text((x,y2),line[1],font = font_style,fill = "black", aligh = "center")
+                    draw.text((x,y1),line[0],font = font_style,fill = "black",anchor = "mm")
+                    draw.text((x,y2),line[1],font = font_style,fill = "black", anchor = "mm")
 
                 else:
-                    draw.text((x,y1),line[0],font = font_style,fill="black")
+                    draw.text((x,y1),line[0],font = font_style,fill="black",anchor = "mm")
                 y1+=430
                 y2+=430
             
@@ -52,19 +52,28 @@ class Phrase:
                     x+=425
                 else:
                     x = 150
-                y1 = 740
-                y2 = 790
+                y1 = 790
+                y2 = 840
                 if len(line) > 1:
-                    draw.text((x,y1),line[0],font = font_style,fill = "black",align = "center")
-                    draw.text((x,y2),line[1],font = font_style,fill = "black", aligh = "center")
+                    draw.text((x,y1),line[0],font = font_style,fill = "black",anchor = "mm")
+                    draw.text((x,y2),line[1],font = font_style,fill = "black", anchor = "mm")
 
                 else:
-                    draw.text((x,y1),line[0],font = font_style,fill="black")
+                    draw.text((x,y1),line[0],font = font_style,fill="black",anchor = "mm")
                 y1+=430
                 y2+=430
+        
 
- 
+        
         name = f_n
+        #with open os.getcwd()+'/output' as ff:
+        #print(os.listdir(os.getcwd()+'/output'))
+        
+            #if n == name:
+                #name +=1
+                
+            #print(os.listdir(os.getcwd()+'/output')[-1])
+        
         bingo_template.save("{}/{}.PNG".format(directory, name), format= 'PNG')
         print("Bingo Card successfully saved, Filename: {} at {}".format(name, directory))
         print("\n")
@@ -89,7 +98,7 @@ class Phrases:
             except ValueError:
                 print("Please input a valid integer! Please try again!")
         
-        invalid_characters = ['/',':','?','<','>','|']
+        invalid_characters = ['/',':','?','<','>','|','\\']
         invalid_char_input = []
         
         open_file_flag = False
@@ -137,12 +146,38 @@ class Phrases:
         if choice == 'y':
             directory = input(str("Choose the file path in where the image will be saved: "))
         else:
-            directory =  os.path.dirname(__file__)+ '\output'
+            directory = os.getcwd()+'/output'
+           
         print("\n")
+        
+    
+        existing_files = os.listdir(os.getcwd()+'\output')
+        print(existing_files)
+        check_files_flag = False
         f_n = 0
-        for i in range(number_of_card_to_be_added):
-            f_n += 1
-            self.create_card(file_name,bingocard_filename,directory,f_n)
+        f_nn = 0
+        run_numm = 0
+        
+        while run_num != run_numm
+            for i in range(number_of_card_to_be_added):
+                while check_files_flag is False:
+                    f_n_check = str(f_nn +1)+".PNG"
+                    print(f_n_check)
+            #if f_n_check in existing_files:
+                    while f_n_check in existing_files:
+                        f_n_check = f_n_check.rstrip('.PNG')
+                        f_n_check = int(f_n_check)
+                        f_n_check +=1
+                        f_n_check = str(f_n_check)+".PNG"
+                        if f_n_check not in existing_files:
+                            f_n = f_n_check
+                            check_files_flag = True
+
+            #else:
+                #f_n += 1
+                #self.create_card(file_name,bingocard_filename,directory,f_n)
+            
+        self.create_card(file_name,bingocard_filename,directory,f_n)
             
 if __name__ == '__main__':
     phrase = Phrases()
