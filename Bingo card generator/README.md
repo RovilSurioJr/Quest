@@ -1,7 +1,0 @@
-# Bingo card generator
-
-
-
-
-
-
