@@ -74,10 +74,6 @@ class Phrase:
         print("Bingo Card successfully saved, Filename: {} at {}".format(name, directory))
         bingo_template.close()
         print("\n")
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-
-
 
 class Phrases:
 
