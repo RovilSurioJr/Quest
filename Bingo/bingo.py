@@ -149,7 +149,11 @@ class Phrases:
         print("\n")
         f_n = 0
         
+        if not os.path.exists(os.getcwd()+'\output'):
+            os.makedirs(os.getcwd()+'\output')
+                              
         file_name_l = os.listdir(os.getcwd()+'\output')
+        
         if len(file_name_l) > 0:
             f_n = len(file_name_l)
             for i in range(number_of_card_to_be_added):
