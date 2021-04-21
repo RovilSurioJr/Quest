@@ -66,8 +66,13 @@ class Phrase:
                 y2+=430
         
         name = f_n
+        
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
         bingo_template.save("{}/{}.PNG".format(directory, name), format= 'PNG')
         print("Bingo Card successfully saved, Filename: {} at {}".format(name, directory))
+        bingo_template.close()
         print("\n")
         if not os.path.exists(directory):
             os.makedirs(directory)
