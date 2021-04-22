@@ -14,8 +14,9 @@ class Phrase:
         bingo_template = Image.open("{}.PNG".format(bingocard_filename))
         draw = ImageDraw.Draw(bingo_template)
         x = 350
-        y1 = 790
-        y2 = 840
+        y1 = 760
+        y2 = 810
+        y3 = 860
 
         while len(bingo_card) != 9:
             with open("{}.txt".format(file_name), 'r') as file:
@@ -36,17 +37,24 @@ class Phrase:
             final_phrases.append(line_wrapped)
 
         for line in final_phrases:
+            print(line)
 
-            if y1 <= 1650 and y2 <= 1700:
+            if y1 <= 1650 and y2 <= 1700 and y3 <= 1750:
 
-                if len(line) > 1:
+                if len(line) == 2:
                     draw.text((x,y1),line[0],font = font_style,fill = "black",anchor = "mm")
                     draw.text((x,y2),line[1],font = font_style,fill = "black", anchor = "mm")
-
+                    
+                elif len(line) == 3:
+                    draw.text((x,y1),line[0],font = font_style,fill = "black",anchor = "mm")
+                    draw.text((x,y2),line[1],font = font_style,fill = "black", anchor = "mm")
+                    draw.text((x,y3),line[2],font = font_style,fill = "black", anchor = "mm")
+                    
                 else:
                     draw.text((x,y1),line[0],font = font_style,fill="black",anchor = "mm")
                 y1+=430
                 y2+=430
+                y3+=430
             
                 
             else:
@@ -54,16 +62,23 @@ class Phrase:
                     x+=425
                 else:
                     x = 150
-                y1 = 790
-                y2 = 840
-                if len(line) > 1:
+                y1 = 760
+                y2 = 810
+                y3 = 860
+                if len(line) == 2:
                     draw.text((x,y1),line[0],font = font_style,fill = "black",anchor = "mm")
                     draw.text((x,y2),line[1],font = font_style,fill = "black", anchor = "mm")
+
+                elif len(line) == 3:
+                    draw.text((x,y1),line[0],font = font_style,fill = "black",anchor = "mm")
+                    draw.text((x,y2),line[1],font = font_style,fill = "black", anchor = "mm")
+                    draw.text((x,y3),line[2],font = font_style,fill = "black", anchor = "mm")
 
                 else:
                     draw.text((x,y1),line[0],font = font_style,fill="black",anchor = "mm")
                 y1+=430
                 y2+=430
+                y3+=430
         
         name = f_n
         
@@ -95,7 +110,7 @@ class Phrases:
         
         open_file_flag = False
         while open_file_flag is False:
-            file_name = input("Filename of phrases (i.e, hello): ")
+            file_name = input("Filename of phrases (i.e, phrase): ")
             for ic in invalid_characters:
                 if ic in file_name:
                     invalid_char_input.append(ic)
