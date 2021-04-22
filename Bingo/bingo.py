@@ -37,8 +37,6 @@ class Phrase:
             final_phrases.append(line_wrapped)
 
         for line in final_phrases:
-            print(line)
-
             if y1 <= 1650 and y2 <= 1700 and y3 <= 1750:
 
                 if len(line) == 2:
