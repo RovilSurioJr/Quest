@@ -13,6 +13,8 @@ class Cert:
                 draw = ImageDraw.Draw(img)
                 draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
                           font=ImageFont.truetype('GOTHICB.ttf', 100), anchor='mm')
+                draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
+                          font=ImageFont.truetype('GOTHICB.ttf', 100), anchor='mm')
         
                 if not os.path.exists(directory):
                     os.makedirs(directory)
