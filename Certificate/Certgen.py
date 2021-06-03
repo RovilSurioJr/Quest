@@ -78,9 +78,9 @@ class Certs:
                 p_choices = [1,2]
                 print("1). Speakers")
                 print("2). Participants")
-                user_choice = (int(input("For whom the certificate?")))
+                user_choice = (int(input("The certificate is for whom?")))
                 while user_choice not in p_choices:
-                    user_choice = (int(input("For whom the certificate?")))
+                    user_choice = (int(input("The certificate is for whom?")))
                 break
             except ValueError:
                 print("Please input a valid integer! Please try again")
