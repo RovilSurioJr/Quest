@@ -11,14 +11,31 @@ class Cert:
             if row['Appreciation'] == 1:
                 img = Image.open("{}.jpg".format(speaker_fn))
                 draw = ImageDraw.Draw(img)
-                draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
-                          font=ImageFont.truetype('GOTHICB.ttf', 100), anchor='mm')
-                draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
-                          font=ImageFont.truetype('GOTHICB.ttf', 100), anchor='mm')
+                name = row['Name']
+                if len(name) > 30:
+                    draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
+                              font=ImageFont.truetype('GOTHICB.ttf', 140), anchor='mm')
+
+                    if len(row['Topic']) > 65:
+                        draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
+                                  font=ImageFont.truetype('GOTHICB.ttf', 70), anchor='mm')
+                    else:
+                        draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
+                                  font=ImageFont.truetype('GOTHICB.ttf', 77), anchor='mm')
+                        
+                else:
+                    draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
+                              font=ImageFont.truetype('GOTHICB.ttf', 160), anchor='mm')
+                    if len(row['Topic']) > 65:
+                        draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
+                                  font=ImageFont.truetype('GOTHICB.ttf', 70), anchor='mm')
+                    else:
+                        draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
+                                  font=ImageFont.truetype('GOTHICB.ttf', 77), anchor='mm')
         
                 if not os.path.exists(directory):
                     os.makedirs(directory)
-                name = row['Name']
+                
                 img.save("{}/{}.jpg".format(directory, name), format= 'JPEG')
                 print("Appreciation certificate successfully saved, Filename: {} at {}".format(name, directory))
                 img.close()
@@ -31,7 +48,7 @@ class Cert:
                 img = Image.open("{}.jpg".format(attendance_fn))
                 draw = ImageDraw.Draw(img)
                 draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
-                          font=ImageFont.truetype('GOTHICB.ttf', 100), anchor='mm')
+                          font=ImageFont.truetype('GOTHICB.ttf', 160), anchor='mm')
 
                 if not os.path.exists(directory):
                     os.makedirs(directory)
@@ -49,7 +66,7 @@ class Cert:
                 img = Image.open("{}.jpg".format(attendance_fn))
                 draw = ImageDraw.Draw(img)
                 draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
-                          font=ImageFont.truetype('GOTHICB.ttf', 100), anchor='mm')
+                          font=ImageFont.truetype('GOTHICB.ttf', 160), anchor='mm')
                 if not os.path.exists(directory):
                     os.makedirs(directory)
                 name = row['Name']
