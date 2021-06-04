@@ -12,24 +12,31 @@ class Cert:
                 img = Image.open("{}.jpg".format(speaker_fn))
                 draw = ImageDraw.Draw(img)
                 name = row['Name']
-                if len(name) > 30:
+                
+                print("The number of characters of the name of the speaker are:",len(name))
+                print("The number of characters of the topic of the speaker are:",len(row['Topic']))
+                
+                if len(name) > 30: # IF THE NAME HAS MORE THAN 30 CHARACTERS THEN USE 140pt FONT SIZE
                     draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
                               font=ImageFont.truetype('GOTHICB.ttf', 140), anchor='mm')
 
-                    if len(row['Topic']) > 65:
+                    if len(row['Topic']) > 65: # IF THE TOPIC HAS MORE THAN 65 CHARACTERS THEN USE 70pt FONT SIZE
                         draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
                                   font=ImageFont.truetype('GOTHICB.ttf', 70), anchor='mm')
-                    else:
+
+                    else: # IF THE TOPIC HAS LESS THAN 65 CHARACTERS THEN USE 77pt FONT SIZE
                         draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
                                   font=ImageFont.truetype('GOTHICB.ttf', 77), anchor='mm')
                         
-                else:
+                else: # IF THE NAME HAS LESS THAN 30 CHARACTERS THEN USE 160pt FONT SIZE
                     draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
                               font=ImageFont.truetype('GOTHICB.ttf', 160), anchor='mm')
-                    if len(row['Topic']) > 65:
+
+                    if len(row['Topic']) > 65: # THE TOPIC HAS MORE THAN 65 CHARACTERS THEN USE 70pt FONT SIZE
                         draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
                                   font=ImageFont.truetype('GOTHICB.ttf', 70), anchor='mm')
-                    else:
+                        
+                    else: # THE TOPIC HAS MORE THAN 65 CHARACTERS THEN USE 70pt FONT SIZE
                         draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
                                   font=ImageFont.truetype('GOTHICB.ttf', 77), anchor='mm')
         
