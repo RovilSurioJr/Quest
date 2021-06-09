@@ -5,7 +5,7 @@ import pandas as pd
 import os
 
 class speakers():
-    f_n = []
+    
     def __init__(self,master):
         self.f_n = []
         self.t_n = []
@@ -167,28 +167,11 @@ class speakers():
             os.makedirs(os.getcwd()+'\Speakers')
 
         self.cert_gen_speaker(directory)
-        
-        
-
-        
 
     def s_directory(self):
-        #choices = ["y","n"]
-        #choice = input("Specify where to save the image(y) or save it to the output folder(n)")
-        #choice = choice.lower()
-        #while choice not in choices:
-            #print("Please choose y or n!")
-            #choice = input("Specify where to save the image(y) or save it to the output folder(n)")
-            #choice = choice.lower()
-                
-        #if choice == 'y':
-            #directory = input(str("Choose the file path in where the image will be saved: "))
-        #elif choice == 'n':
-            #directory = os.getcwd()+'\Speakers'
-           
-        #print("\n")
 
         directory = self.dir_path_entry.get()
+        self.cert_gen_speaker(directory)
 
     def cert_gen_speaker(self,directory):
 
