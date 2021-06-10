@@ -1,14 +1,16 @@
+
 from tkinter import *
 import tkinter.messagebox
 from PIL import Image, ImageFont, ImageDraw
 import pandas as pd
 import os
 
-class speakers():
+class participants():
     
     def __init__(self,master):
         self.f_n = []
         self.t_n = []
+        self.session_choice = []
 
         self.master = master
 
@@ -20,7 +22,7 @@ class speakers():
 
         
         self.heading = Label(master)
-        self.heading = Label(master, text="Create Certificate for speaker", font = ('arial 20 bold'), fg ='green')
+        self.heading = Label(master, text="Create Certificate for participants", font = ('arial 20 bold'), fg ='green')
         self.heading.place(x=300,y=0)
 
         #Text
@@ -37,7 +39,6 @@ class speakers():
 
         self.search_file_button = Button(master, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_excel_file)
         self.search_file_button.place(x=500, y=75)
-
 
 
     def check_excel_file(self):
@@ -72,7 +73,6 @@ class speakers():
                 #create_speaker_cert()
                 break
                 #print(e)
-            
     def show_template_button(self):
 
 
@@ -94,7 +94,7 @@ class speakers():
     
     def check_template_file(self):
 
-        speaker_fn = self.tempfile_entry.get()
+        temp_fn = self.tempfile_entry.get()
 
         invalid_characters = ['/',':','?','<','>','|','\\']
         invalid_char_input = []
@@ -103,7 +103,7 @@ class speakers():
         while open_tempfile_flag is False:
             #speaker_fn = input(str("Filename of Speakers template (i.e, speakers_temp): "))
             for inc in invalid_characters:
-                if inc in speaker_fn:
+                if inc in temp_fn:
                     invalid_char_input.append(inc)
                 
             if len(invalid_char_input) > 0:
@@ -114,10 +114,10 @@ class speakers():
             else: invalid_char_input.clear()
         
             try:
-                with open("{}.jpg".format(speaker_fn), 'r') as file:
+                with open("{}.jpg".format(temp_fn), 'r') as file:
                     open_tempfile_flag  = True
-                    self.t_n.append(speaker_fn) #Appending to list
-                    self.show_directory_button()
+                    self.t_n.append(temp_fn) #Appending to list
+                    self.show_session_button()
                     
                     
             except IOError as e:
@@ -126,10 +126,12 @@ class speakers():
                 break
                 #print(e)
             
-    def show_directory_button(self):
+
+    def show_session_button(self):
+
         #Text
 
-        self.dir= Label(self.pack_on_left, text = "Output Directory:", font = ('arial 12 bold'))
+        self.dir= Label(self.pack_on_left, text = "Choose session:", font = ('arial 12 bold'))
         self.dir.place(x=25, y=165)
 
         #Text box
@@ -139,95 +141,131 @@ class speakers():
 
         #Button
 
-        self.speci_file_button = Button(self.pack_on_left, text = "Specify", width = 10, height = 1, bg = 'green', fg='white', command = self.specify_dir)
+        self.speci_file_button = Button(self.pack_on_left, text = "AM", width = 10, height = 1, bg = 'green', fg='white', command = self.am_session)
         self.speci_file_button.place(x=250, y=165)
 
-        self.gen_file_button = Button(self.pack_on_left, text = "Generate", width = 10, height = 1, bg = 'green', fg='white', command = self.gen_directory)
+        self.gen_file_button = Button(self.pack_on_left, text = "PM", width = 10, height = 1, bg = 'green', fg='white', command = self.pm_session)
         self.gen_file_button.place(x=400, y=165)
+
+    def am_session(self):
+        self.session_choice.append('AM')
+        self.show_directory_button()
+
+    def pm_session(self):
+        self.session_choice.append('PM')
+        self.show_directory_button()
+
+    def show_directory_button(self):
+        #Text
+
+        self.dir= Label(self.pack_on_left, text = "Output Directory:", font = ('arial 12 bold'))
+        self.dir.place(x=25, y=210)
+
+        #Text box
+
+        #self.tempfile_entry =  Entry(self.pack_on_left, width = 25, font = ('arial 12 '))
+        #self.tempfile_entry.place(x=250, y=120)
+
+        #Button
+
+        self.speci_file_button = Button(self.pack_on_left, text = "Specify", width = 10, height = 1, bg = 'green', fg='white', command = self.specify_dir)
+        self.speci_file_button.place(x=250, y=210)
+
+        self.gen_file_button = Button(self.pack_on_left, text = "Generate", width = 10, height = 1, bg = 'green', fg='white', command = self.gen_directory)
+        self.gen_file_button.place(x=400, y=210)
+
 
     def specify_dir(self):
 
         #Text
 
         self.dir= Label(self.pack_on_left, text = "Input the directory path:", font = ('arial 12 bold'))
-        self.dir.place(x=25, y=210)
+        self.dir.place(x=25, y=255)
 
         #Text box
 
         self.dir_path_entry =  Entry(self.pack_on_left, width = 25, font = ('arial 12 '))
-        self.dir_path_entry.place(x=250, y=210)
+        self.dir_path_entry.place(x=250, y=255)
 
         self.speci_enter_button = Button(self.pack_on_left, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.s_directory)
-        self.speci_enter_button.place(x=500, y=210)
+        self.speci_enter_button.place(x=500, y=255)
 
     def gen_directory(self):
-        directory = os.getcwd()+'\Speakers'
 
-        if not os.path.exists(os.getcwd()+'\Speakers'):
-            os.makedirs(os.getcwd()+'\Speakers')
+        if self.session_choice[0] == 'AM':
+            directory = os.getcwd()+'\AM_Participants'
 
-        self.cert_gen_speaker(directory)
+        else:
+            directory = os.getcwd()+'\PM_Participants'
+
+        if not os.path.exists(os.getcwd()+'\AM_Participants'):
+            os.makedirs(os.getcwd()+'\AM_Participants')
+
+        if not os.path.exists(os.getcwd()+'\PM_Participants'):
+            os.makedirs(os.getcwd()+'\PM_Participants')
+
+        self.cert_gen_partici(directory)
 
     def s_directory(self):
 
         directory = self.dir_path_entry.get()
-        self.cert_gen_speaker(directory)
+        self.cert_gen_partici(directory)
 
-    def cert_gen_speaker(self,directory):
-
+    def cert_gen_partici(self,directory):
         file_name = self.f_n[0]
-        speaker_fn = self.t_n[0]
-
-        df = pd.read_csv("{}.csv".format(file_name))
-        for index, row in df.iterrows():
-            if row['Appreciation'] == 1:
-                img = Image.open("{}.jpg".format(speaker_fn))
-                draw = ImageDraw.Draw(img)
-                name = row['Name']
-                
-                print("The number of characters of the name of the speaker are:",len(name))
-                print("The number of characters of the topic of the speaker are:",len(row['Topic']))
-                
-                if len(name) > 30: # IF THE NAME HAS MORE THAN 30 CHARACTERS THEN USE 140pt FONT SIZE
-                    draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
-                              font=ImageFont.truetype('GOTHICB.ttf', 140), anchor='mm')
-
-                    if len(row['Topic']) > 65: # IF THE TOPIC HAS MORE THAN 65 CHARACTERS THEN USE 70pt FONT SIZE
-                        draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
-                                  font=ImageFont.truetype('GOTHICB.ttf', 70), anchor='mm')
-
-                    else: # IF THE TOPIC HAS LESS THAN 65 CHARACTERS THEN USE 77pt FONT SIZE
-                        draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
-                                  font=ImageFont.truetype('GOTHICB.ttf', 77), anchor='mm')
-                        
-                else: # IF THE NAME HAS LESS THAN 30 CHARACTERS THEN USE 160pt FONT SIZE
-                    draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
-                              font=ImageFont.truetype('GOTHICB.ttf', 160), anchor='mm')
-
-                    if len(row['Topic']) > 65: # THE TOPIC HAS MORE THAN 65 CHARACTERS THEN USE 70pt FONT SIZE
-                        draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
-                                  font=ImageFont.truetype('GOTHICB.ttf', 70), anchor='mm')
-                        
-                    else: # THE TOPIC HAS MORE THAN 65 CHARACTERS THEN USE 70pt FONT SIZE
-                        draw.text(xy=(1873, 1400), text='{}'.format(row['Topic']), fill=(0, 0, 0),
-                                  font=ImageFont.truetype('GOTHICB.ttf', 77), anchor='mm')
+        temp_fn = self.t_n[0]
         
-                if not os.path.exists(directory):
-                    os.makedirs(directory)
-                
-                img.save("{}/{}.jpg".format(directory, name), format= 'JPEG')
-                print("Appreciation certificate successfully saved, Filename: {} at {}".format(name, directory))
-                img.close()
-                print("\n")
+        if self.session_choice[0] == 'AM':
+            self.cert_gen_am_participants(directory)
 
-        
+        else:
+            self.cert_gen_pm_participants(directory)
             
 
 
+    def cert_gen_am_participants(self,directory):
+        file_name = self.f_n[0]
+        temp_fn = self.t_n[0]
+        
+        df = pd.read_csv("{}.csv".format(file_name))
+        for index, row in df.iterrows():
+            if row['AM Participation'] == 1:
+                img = Image.open("{}.jpg".format(temp_fn))
+                draw = ImageDraw.Draw(img)
+                draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
+                          font=ImageFont.truetype('GOTHICB.ttf', 160), anchor='mm')
 
-def create_speaker_cert():
+                if not os.path.exists(directory):
+                    os.makedirs(directory)
+                name = row['Name']
+                img.save("{}/{}.jpg".format(directory, name), format= 'JPEG')
+                print("AM Participants certificate successfully saved, Filename: {} at {}".format(name, directory))
+                img.close()
+                print("\n")
+
+    def cert_gen_pm_participants(self,directory):
+
+        file_name = self.f_n[0]
+        temp_fn = self.t_n[0]
+        
+        df = pd.read_csv("{}.csv".format(file_name))
+        for index, row in df.iterrows():
+            if row['PM Participation'] == 1:
+                img = Image.open("{}.jpg".format(temp_fn))
+                draw = ImageDraw.Draw(img)
+                draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
+                          font=ImageFont.truetype('GOTHICB.ttf', 160), anchor='mm')
+                if not os.path.exists(directory):
+                    os.makedirs(directory)
+                name = row['Name']
+                img.save("{}/{}.jpg".format(directory, name), format= 'JPEG')
+                print("PM Participants certificate successfully saved, Filename: {} at {}".format(name, directory))
+                img.close()
+                print("\n")
+
+def create_participants_cert():
         window = Tk()
-        create_cert = speakers(window )
+        create_cert = participants(window)
         window.geometry("963x749+540+110")
         window.title("Certificate Generator")
         window.mainloop()

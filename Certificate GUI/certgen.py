@@ -5,6 +5,7 @@ from PIL import Image, ImageFont, ImageDraw
 import pandas as pd
 
 import speakers as sp
+import participants as ps
 
 
 class Main():
@@ -61,6 +62,20 @@ class Main():
         self.Button1.configure(text='''Speakers''')
         self.Button1.configure(width=566)
         self.Button1.configure(command=sp.create_speaker_cert)
+
+        self.Button2 = Button(self.Frame1)
+        self.Button2.place(relx=0.33, rely=0.17, height=180, width=290)
+        self.Button2.configure(activebackground="#d9d9d9")
+        self.Button2.configure(activeforeground="#000000")
+        self.Button2.configure(disabledforeground="#bfbfbf")
+        self.Button2.configure(font=font14)
+        self.Button2.configure(foreground="#000000")
+        self.Button2.configure(highlightbackground="#d9d9d9")
+        self.Button2.configure(highlightcolor="black")
+        self.Button2.configure(pady="0")
+        self.Button2.configure(text='''Participants''')
+        self.Button2.configure(width=566)
+        self.Button2.configure(command=ps.create_participants_cert)
 
         root.mainloop()
 
