@@ -1,5 +1,6 @@
 
 from tkinter import *
+from tkinter import ttk
 import tkinter.messagebox
 from PIL import Image, ImageFont, ImageDraw
 import pandas as pd
@@ -126,7 +127,14 @@ class participants():
                 break
                 #print(e)
             
-
+    def combo_click(self,session_choices):
+        if session_choices.widget.get() == 'AM':
+            self.am_session()
+            print("wah")
+        else:
+            self.pm_session()
+            print("woh")
+ 
     def show_session_button(self):
 
         #Text
@@ -140,12 +148,21 @@ class participants():
         #self.tempfile_entry.place(x=250, y=120)
 
         #Button
+        s_choice = ['AM','PM']
+        
+        self.session_choices = ttk.Combobox(self.pack_on_left, value = s_choice,width =10)
+        #session_choices['values'] = ['AM','PM']
+        #session_choices.place(x=250, y=165)
+        self.session_choices.bind("<<ComboboxSelected>>", self.combo_click)
+        self.session_choices.place(x=250, y=165)
 
-        self.speci_file_button = Button(self.pack_on_left, text = "AM", width = 10, height = 1, bg = 'green', fg='white', command = self.am_session)
-        self.speci_file_button.place(x=250, y=165)
 
-        self.gen_file_button = Button(self.pack_on_left, text = "PM", width = 10, height = 1, bg = 'green', fg='white', command = self.pm_session)
-        self.gen_file_button.place(x=400, y=165)
+        #self.speci_file_button = Button(self.pack_on_left, text = "AM", width = 10, height = 1, bg = 'green', fg='white', command = self.am_session)
+        #self.speci_file_button.place(x=250, y=165)
+
+        #self.gen_file_button = Button(self.pack_on_left, text = "PM", width = 10, height = 1, bg = 'green', fg='white', command = self.pm_session)
+        #self.gen_file_button.place(x=400, y=165)
+
 
     def am_session(self):
         self.session_choice.append('AM')
@@ -192,7 +209,7 @@ class participants():
 
     def gen_directory(self):
 
-        if self.session_choice[0] == 'AM':
+        if self.session_choice[-1] == 'AM':
             directory = os.getcwd()+'\AM_Participants'
 
         else:
@@ -212,10 +229,10 @@ class participants():
         self.cert_gen_partici(directory)
 
     def cert_gen_partici(self,directory):
-        file_name = self.f_n[0]
-        temp_fn = self.t_n[0]
+        #file_name = self.f_n[-1]
+        #temp_fn = self.t_n[-1]
         
-        if self.session_choice[0] == 'AM':
+        if self.session_choice[-1] == 'AM':
             self.cert_gen_am_participants(directory)
 
         else:
@@ -224,8 +241,8 @@ class participants():
 
 
     def cert_gen_am_participants(self,directory):
-        file_name = self.f_n[0]
-        temp_fn = self.t_n[0]
+        file_name = self.f_n[-1]
+        temp_fn = self.t_n[-1]
         
         df = pd.read_csv("{}.csv".format(file_name))
         for index, row in df.iterrows():
@@ -245,8 +262,8 @@ class participants():
 
     def cert_gen_pm_participants(self,directory):
 
-        file_name = self.f_n[0]
-        temp_fn = self.t_n[0]
+        file_name = self.f_n[-1]
+        temp_fn = self.t_n[-1]
         
         df = pd.read_csv("{}.csv".format(file_name))
         for index, row in df.iterrows():
