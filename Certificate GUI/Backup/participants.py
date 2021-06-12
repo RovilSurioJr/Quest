@@ -14,12 +14,10 @@ class participants():
         self.t_n = []
         self.session_choice = []
 
-        self.master = master
-
-        self.pack_top = Frame(master, width=700, height=280) # Frames
+        self.pack_top = Frame(master, width=700, height=280) 
         self.pack_top.pack(side=TOP)
         
-        self.pack_bottom = Frame(master, width=700, height=400) #The remaining width
+        self.pack_bottom = Frame(master, width=700, height=400) 
         self.pack_bottom.pack(side=BOTTOM)
 
         
@@ -290,9 +288,8 @@ class participants():
                 
                 print("\n")
 
-def create_participants_cert():
-        window = Tk()
+def create_participants_cert(self,window):
         create_cert = participants(window)
-        window.geometry("963x500+540+110")
-        window.title("Certificate Generator")
-        window.mainloop()
+        #window.geometry("963x500+540+110")
+        #window.title("Certificate Generator")
+        #window.mainloop()

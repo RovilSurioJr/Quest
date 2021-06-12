@@ -10,12 +10,10 @@ class speakers():
         self.f_n = []
         self.t_n = []
 
-        self.master = master
-
-        self.pack_top = Frame(master, width=700, height=280) # Frames
+        self.pack_top = Frame(master, width=700, height=280)
         self.pack_top.pack(side=TOP)
         
-        self.pack_bottom = Frame(master, width=700, height=400) #The remaining width
+        self.pack_bottom = Frame(master, width=700, height=400) 
         self.pack_bottom.pack(side=BOTTOM)
 
         
@@ -80,6 +78,7 @@ class speakers():
 
         self.tempfile= Label(self.pack_top, text = "Input template filename:", font = ('arial 12 bold'))
         self.tempfile.place(x=25, y=120)
+        #self.tempfile.pack()
 
         #Text box
 
@@ -244,9 +243,8 @@ class speakers():
 
 
 
-def create_speaker_cert():
-        window = Tk()
-        create_cert = speakers(window )
-        window.geometry("963x500+540+110")
-        window.title("Certificate Generator")
-        window.mainloop()
+def create_speaker_cert(self,window):
+        create_cert = speakers(window)
+        #window.geometry("963x500+540+110")
+        #window.title("Certificate Generator")
+        #window.mainloop()
