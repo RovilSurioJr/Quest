@@ -4,6 +4,8 @@ from PIL import Image, ImageFont, ImageDraw
 import pandas as pd
 import os
 
+
+
 class speakers():
     
     def __init__(self,master):
@@ -21,6 +23,22 @@ class speakers():
         self.heading = Label(master, text="Create Certificate for speaker", font = ('arial 20 bold'), fg ='green')
         self.heading.place(x=300,y=0)
 
+    def recreate_menu(self):
+
+        self.Button1 = Button(master, text = "Speaker", width = 10, height = 1, bg = 'green',fg='white',  command=lambda:[self.delete_widget(),create_speaker_cert(self,window)])
+        self.Button1.place(x=155, y=75)
+
+        self.Button2 = Button(master,text = "Participants", width = 10, height = 1, bg = 'green',fg='white', command=lambda:[self.delete_widget(),ps.create_participants_cert(self,window)])
+        self.Button2.place(x=500, y=75)
+
+    def delete_widget(self):
+        self.Button1.destroy()
+        self.Button2.destroy()
+
+        self.back_button = Button(master, text = "Back", width = 10, height = 1, bg = 'green', fg='white', command=lambda:[self.delete_frames(), recreate_menu()])
+        self.back_button.place(x=120, y=40)
+
+
         #Text
 
         self.excelfile= Label(master, text = "Input csv filename:", font = ('arial 12 bold'))
@@ -35,6 +53,21 @@ class speakers():
 
         self.search_file_button = Button(master, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_excel_file)
         self.search_file_button.place(x=630, y=75)
+
+    def delete_frames(self):
+        for widgets in self.pack_top.winfo_children():
+            widgets.destroy()
+
+        for widgetss in self.pack_bottom.winfo_children():
+            widgetss.destroy()
+
+        self.pack_bottom.destroy()
+        self.heading.destroy()
+        self.excelfile.destroy()
+        self.excelfile_entry.destroy()
+        self.search_file_button.destroy()
+        self.back_button.destroy()
+
 
 
 

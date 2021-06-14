@@ -20,13 +20,15 @@ class Main():
     def delete_widget(self):
         self.Button1.destroy()
         self.Button2.destroy()
+
+
+
         
-
-
 window = Tk()
 main = Main(window)
 window.geometry("963x500+540+110")
 window.title("Certificate Generator")
 window.mainloop()
+
 
 
