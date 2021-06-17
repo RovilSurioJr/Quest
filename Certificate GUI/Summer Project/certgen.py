@@ -14,6 +14,9 @@ class Names():
         self.font_n = []
         self.font_s = []
 
+        self.x_coor = []
+        self.y_coor = []
+
         self.pack_top = Frame(master, width=700, height=400 ,bg = 'white')
         self.pack_top.pack(side=TOP)
         
@@ -183,8 +186,8 @@ class Names():
         
         self.img_s= Label(self.pack_top, text = "X & Y for placement of names:", font = ('arial 12 bold'))
         self.img_s.place(x=25, y=255)
-        self.img_sz_note= Label(self.pack_top, text = "*The default is at center of image", font = ('arial 9 italic'))
-        self.img_sz_note.place(x=25, y=275)
+        self.img_sz_note= Label(self.pack_top, text = "*The default is at center of the image", font = ('arial 9 italic'))
+        self.img_sz_note.place(x=267, y=275)
 
         img = Image.open("{}.jpg".format(speaker_fn))
         lxw = img.size
@@ -198,8 +201,17 @@ class Names():
         self.Y_val_entry =  Entry(self.pack_top, width = 6, font = ('arial 12'))
         self.Y_val_entry.place(x=380, y=255)
         self.Y_val_entry.insert(0, "{}".format(width))
-        
+
         self.show_directory_button()
+
+        #self.check_the_entry_on_XY()
+
+
+    #def check_the_entry_on_XY(self):
+        #if self.X_val_entry.get() and self.Y_val_entry.get() == '':
+            #tkinter.messagebox.showinfo('Error',"Please Fill the X and Y coordinates")
+        #else:
+            #self.show_directory_button()
         
         
  
@@ -235,10 +247,10 @@ class Names():
         self.speci_enter_button.place(x=500, y=345)
 
     def gen_directory(self):
-        directory = os.getcwd()+'\Speakers'
+        directory = os.getcwd()+'\Output'
 
-        if not os.path.exists(os.getcwd()+'\Speakers'):
-            os.makedirs(os.getcwd()+'\Speakers')
+        if not os.path.exists(os.getcwd()+'\Output'):
+            os.makedirs(os.getcwd()+'\Output')
 
         self.cert_gen_speaker(directory)
 
@@ -253,6 +265,16 @@ class Names():
         speaker_fn = self.t_n[-1]
         font_style = self.font_n[-1]
         font_size = int(self.font_s[-1])
+
+        l = self.X_val_entry.get()
+        w = self.Y_val_entry.get()
+        X_img = int(l)
+        Y_img = int(w)
+        self.x_coor.append(X_img)
+        self.y_coor.append(Y_img)
+        final_x = self.x_coor[-1]
+        final_y = self.y_coor[-1]
+
 
         scroll_barY = Scrollbar(self.pack_bottom,orient=VERTICAL)
         scroll_barX = Scrollbar(self.pack_bottom,orient=HORIZONTAL)
@@ -272,24 +294,21 @@ class Names():
         df = pd.read_csv("{}.csv".format(file_name))
         for index, row in df.iterrows():
             img = Image.open("{}.jpg".format(speaker_fn))
-            l = self.X_val_entry.get()
-            w = self.Y_val_entry.get()
-            X_img = int(l)
-            Y_img = int(w)
+            
             
             draw = ImageDraw.Draw(img)
             name = row['Name']
     
                 
             if len(name) > 30: # IF THE NAME HAS MORE THAN 30 CHARACTERS THEN USE 140pt FONT SIZE
-                draw.text(xy=(X_img, Y_img), text='{}'.format(row['Name']), fill=(0, 0, 0),
+                draw.text(xy=(final_x, final_y), text='{}'.format(row['Name']), fill=(0, 0, 0),
                             font=ImageFont.truetype("{}.ttf".format(font_style), font_size), anchor='mm')
 
                     #"{}.jpg".format(speaker_fn)
 
                         
             else: # IF THE NAME HAS LESS THAN 30 CHARACTERS THEN USE 160pt FONT SIZE
-                draw.text(xy=(X_img, Y_img), text='{}'.format(row['Name']), fill=(0, 0, 0),
+                draw.text(xy=(final_x, final_y), text='{}'.format(row['Name']), fill=(0, 0, 0),
                             font=ImageFont.truetype("{}.ttf".format(font_style), font_size), anchor='mm')
         
             if not os.path.exists(directory):
@@ -312,4 +331,5 @@ window = Tk()
 main = Names(window)
 window.geometry("963x500+540+110")
 window.title("Certificate Generator")
+window.resizable(width=False, height=False)
 window.mainloop()
