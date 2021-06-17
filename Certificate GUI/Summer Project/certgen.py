@@ -14,7 +14,7 @@ class Names():
         self.font_n = []
         self.font_s = []
 
-        self.pack_top = Frame(master, width=700, height=280)
+        self.pack_top = Frame(master, width=700, height=400 ,bg = 'white')
         self.pack_top.pack(side=TOP)
         
         self.pack_bottom = Frame(master, width=700, height=400) 
@@ -34,6 +34,7 @@ class Names():
 
         self.excelfile_entry =  Entry(master, width = 25, font = ('arial 12 '))
         self.excelfile_entry.place(x=380, y=75)
+
 
         #Button
 
@@ -100,9 +101,9 @@ class Names():
         else: invalid_char_input.clear()
         
         try:
-            with open("{}.jpg".format(speaker_fn), 'r') as file:
-                self.t_n.append(speaker_fn) #Appending to list
-                self.show_font_style_button()
+            image =Image.open("{}.jpg".format(speaker_fn))
+            self.t_n.append(speaker_fn) #Appending to list
+            self.show_font_style_button()
                         
         except IOError as e:
             tkinter.messagebox.showinfo('Error',e)
@@ -139,7 +140,7 @@ class Names():
         else: invalid_char_input.clear()
         
         try:
-            with open("{}.ttf".format(f_style_fn), 'r') as file:
+            with open("{}.ttf".format(f_style_fn)):
                 self.font_n.append(f_style_fn) #Appending to list
                 self.show_font_size_button()
                         
@@ -166,7 +167,7 @@ class Names():
         try:
             int(font_s)
             self.font_s.append(int(font_s)*.75)
-            self.show_directory_button()
+            self.show_imgsize_button()
             
             
         except ValueError:
@@ -176,6 +177,30 @@ class Names():
         
         
         #print(self.font_s)
+    def show_imgsize_button(self):
+
+        speaker_fn = self.t_n[-1]
+        
+        self.img_s= Label(self.pack_top, text = "X & Y for placement of names:", font = ('arial 12 bold'))
+        self.img_s.place(x=25, y=255)
+        self.img_sz_note= Label(self.pack_top, text = "*The default is at center of image", font = ('arial 9 italic'))
+        self.img_sz_note.place(x=25, y=275)
+
+        img = Image.open("{}.jpg".format(speaker_fn))
+        lxw = img.size
+        length= lxw[0] // 2
+        width = lxw[1] //2
+        
+        self.X_val_entry =  Entry(self.pack_top, width = 6, font = ('arial 12'))
+        self.X_val_entry.place(x=300, y=255)
+        self.X_val_entry.insert(0, "{}".format(length))
+
+        self.Y_val_entry =  Entry(self.pack_top, width = 6, font = ('arial 12'))
+        self.Y_val_entry.place(x=380, y=255)
+        self.Y_val_entry.insert(0, "{}".format(width))
+        
+        self.show_directory_button()
+        
         
  
 
@@ -185,29 +210,29 @@ class Names():
         #Text
 
         self.dir= Label(self.pack_top, text = "Output Directory:", font = ('arial 12 bold'))
-        self.dir.place(x=25, y=255)
+        self.dir.place(x=25, y=300)
 
         #Button
 
         self.speci_file_button = Button(self.pack_top, text = "Specify", width = 10, height = 1, bg = 'green', fg='white', command = self.specify_dir)
-        self.speci_file_button.place(x=250, y=255)
+        self.speci_file_button.place(x=250, y=300)
 
         self.gen_file_button = Button(self.pack_top, text = "Generate", width = 10, height = 1, bg = 'green', fg='white', command = self.gen_directory)
-        self.gen_file_button.place(x=400, y=255)
+        self.gen_file_button.place(x=400, y=300)
 
     def specify_dir(self):
 
         #Text
 
         self.dir= Label(self.pack_top, text = "Input the directory path:", font = ('arial 12 bold'))
-        self.dir.place(x=25, y=300)
+        self.dir.place(x=25, y=345)
 
         #Text box
-        self.dir_path_entry =  Entry(self.pack_top, width = 25, font = ('arial 12 '))
-        self.dir_path_entry.place(x=250, y=300)
+        self.dir_path_entry =  Entry(self.pack_top, width = 25, font = ('arial 12'))
+        self.dir_path_entry.place(x=250, y=345)
 
         self.speci_enter_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.s_directory)
-        self.speci_enter_button.place(x=500, y=300)
+        self.speci_enter_button.place(x=500, y=345)
 
     def gen_directory(self):
         directory = os.getcwd()+'\Speakers'
@@ -247,19 +272,24 @@ class Names():
         df = pd.read_csv("{}.csv".format(file_name))
         for index, row in df.iterrows():
             img = Image.open("{}.jpg".format(speaker_fn))
+            l = self.X_val_entry.get()
+            w = self.Y_val_entry.get()
+            X_img = int(l)
+            Y_img = int(w)
+            
             draw = ImageDraw.Draw(img)
             name = row['Name']
     
                 
             if len(name) > 30: # IF THE NAME HAS MORE THAN 30 CHARACTERS THEN USE 140pt FONT SIZE
-                draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
+                draw.text(xy=(X_img, Y_img), text='{}'.format(row['Name']), fill=(0, 0, 0),
                             font=ImageFont.truetype("{}.ttf".format(font_style), font_size), anchor='mm')
 
                     #"{}.jpg".format(speaker_fn)
 
                         
             else: # IF THE NAME HAS LESS THAN 30 CHARACTERS THEN USE 160pt FONT SIZE
-                draw.text(xy=(1873, 1101), text='{}'.format(row['Name']), fill=(0, 0, 0),
+                draw.text(xy=(X_img, Y_img), text='{}'.format(row['Name']), fill=(0, 0, 0),
                             font=ImageFont.truetype("{}.ttf".format(font_style), font_size), anchor='mm')
         
             if not os.path.exists(directory):
