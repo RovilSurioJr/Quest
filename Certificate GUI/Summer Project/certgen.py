@@ -202,19 +202,27 @@ class Names():
         self.Y_val_entry.place(x=380, y=255)
         self.Y_val_entry.insert(0, "{}".format(width))
 
-        self.show_directory_button()
+        self.proceed_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_coordinates_input )
+        self.proceed_button.place(x=500, y=255)
 
-        #self.check_the_entry_on_XY()
+
+    def check_coordinates_input(self):
+        l = self.X_val_entry.get()
+        w = self.Y_val_entry.get()
+
+        try:
+            
+            X_img = int(l)
+            Y_img = int(w)
+            self.x_coor.append(X_img)
+            self.y_coor.append(Y_img)
+
+            self.show_directory_button()
+            
+        except ValueError:
+            tkinter.messagebox.showinfo('Error',"Please input an integer")
 
 
-    #def check_the_entry_on_XY(self):
-        #if self.X_val_entry.get() and self.Y_val_entry.get() == '':
-            #tkinter.messagebox.showinfo('Error',"Please Fill the X and Y coordinates")
-        #else:
-            #self.show_directory_button()
-        
-        
- 
 
     #self.show_directory_button()
     def show_directory_button(self):
@@ -266,12 +274,7 @@ class Names():
         font_style = self.font_n[-1]
         font_size = int(self.font_s[-1])
 
-        l = self.X_val_entry.get()
-        w = self.Y_val_entry.get()
-        X_img = int(l)
-        Y_img = int(w)
-        self.x_coor.append(X_img)
-        self.y_coor.append(Y_img)
+        
         final_x = self.x_coor[-1]
         final_y = self.y_coor[-1]
 
