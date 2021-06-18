@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 import tkinter.messagebox
 from PIL import Image, ImageFont, ImageDraw
 import pandas as pd
@@ -13,6 +14,7 @@ class Names():
         self.t_n = []
         self.font_n = []
         self.font_s = []
+        self.img_type_choice = []
 
         self.x_coor = []
         self.y_coor = []
@@ -86,10 +88,26 @@ class Names():
         self.enter_file_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_template_file)
         self.enter_file_button.place(x=500, y=120)
 
-    
+        img_type = ['jpg','PNG']
+        self.img_type_choices = ttk.Combobox(self.pack_top, value = img_type,width =10)
+        self.img_type_choices.current(0)
+        self.img_type_choices.bind("<<ComboboxSelected>>", self.combo_click)
+        self.img_type_choices.place(x=600, y=123)
+        self.img_type_choice.append('jpg')
+
+    def combo_click(self,img_type_choices):
+        if self.img_type_choices.get() == 'jpg':
+            self.img_type_choice.append('jpg')
+            print("jpg")
+        else:
+            self.img_type_choice.append('PNG')
+            print("PNG")
+
+
     def check_template_file(self):
 
         speaker_fn = self.tempfile_entry.get()
+        image_type = self.img_type_choice[-1]
 
         invalid_characters = ['/',':','?','<','>','|','\\']
         invalid_char_input = []
@@ -104,7 +122,7 @@ class Names():
         else: invalid_char_input.clear()
         
         try:
-            image =Image.open("{}.jpg".format(speaker_fn))
+            image =Image.open("{}.{}".format(speaker_fn,image_type))
             self.t_n.append(speaker_fn) #Appending to list
             self.show_font_style_button()
                         
@@ -183,13 +201,14 @@ class Names():
     def show_imgsize_button(self):
 
         speaker_fn = self.t_n[-1]
+        image_type = self.img_type_choice[-1]
         
         self.img_s= Label(self.pack_top, text = "X & Y for placement of names:", font = ('arial 12 bold'))
         self.img_s.place(x=25, y=255)
         self.img_sz_note= Label(self.pack_top, text = "*The default is at center of the image", font = ('arial 9 italic'))
         self.img_sz_note.place(x=267, y=275)
 
-        img = Image.open("{}.jpg".format(speaker_fn))
+        img = Image.open("{}.{}".format(speaker_fn,image_type))
         lxw = img.size
         length= lxw[0] // 2
         width = lxw[1] //2
@@ -273,6 +292,14 @@ class Names():
         speaker_fn = self.t_n[-1]
         font_style = self.font_n[-1]
         font_size = int(self.font_s[-1])
+        image_type = self.img_type_choice[-1]
+
+        if image_type == 'jpg':
+            format_saving = 'JPEG'
+        else:
+            format_saving = 'PNG'
+            
+        
 
         
         final_x = self.x_coor[-1]
@@ -296,7 +323,7 @@ class Names():
 
         df = pd.read_csv("{}.csv".format(file_name))
         for index, row in df.iterrows():
-            img = Image.open("{}.jpg".format(speaker_fn))
+            img = Image.open("{}.{}".format(speaker_fn,image_type))
             
             
             draw = ImageDraw.Draw(img)
@@ -317,7 +344,7 @@ class Names():
             if not os.path.exists(directory):
                 os.makedirs(directory)
                 
-            img.save("{}/{}.jpg".format(directory, name), format= 'JPEG')
+            img.save("{}/{}.jpg".format(directory, name), format= '{}'.format(format_saving))
             img.close()
             msg = "Appreciation certificate successfully saved, Filename: {} at {}".format(name, directory)
             print("Appreciation certificate successfully saved, Filename: {} at {}".format(name, directory))
