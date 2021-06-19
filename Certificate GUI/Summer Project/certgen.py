@@ -20,7 +20,7 @@ class Names():
         self.x_coor = []
         self.y_coor = []
 
-        self.pack_top = Frame(master, width=700, height=400 ,bg = 'white')
+        self.pack_top = Frame(master, width=700, height=450 ,bg = 'white')
         self.pack_top.pack(side=TOP)
         
         self.pack_bottom = Frame(master, width=700, height=400) 
@@ -29,11 +29,11 @@ class Names():
 
         self.heading = Label(master)
         self.heading = Label(master, text="Create Certificate", font = ('arial 20 bold'), fg ='green')
-        self.heading.place(x=300,y=0)
+        self.heading.place(x=375,y=0)
 
         #Text
 
-        self.excelfile= Label(master, text = "Input csv filename:", font = ('arial 12 bold'))
+        self.excelfile= Label(master, text = "Input source filename:", font = ('arial 12 bold'))
         self.excelfile.place(x=155, y=75)
 
         #Text box
@@ -93,8 +93,6 @@ class Names():
                     self.show_template_button()
             except IOError as e:
                 tkinter.messagebox.showinfo('Error',e)
-                
-
             
     def show_template_button(self):
 
@@ -266,7 +264,6 @@ class Names():
             tkinter.messagebox.showinfo('Error',"Please input an integer")
 
 
-
     #self.show_directory_button()
     def show_directory_button(self):
 
@@ -285,30 +282,77 @@ class Names():
 
     def specify_dir(self):
 
-        #Text
+        if self.file_t_choice[-1] == 'csv':
+            self.dir= Label(self.pack_top, text = "Input the directory path:", font = ('arial 12 bold'))
+            self.dir.place(x=25, y=390)
 
-        self.dir= Label(self.pack_top, text = "Input the directory path:", font = ('arial 12 bold'))
-        self.dir.place(x=25, y=345)
+            self.dir_path_entry =  Entry(self.pack_top, width = 25, font = ('arial 12'))
+            self.dir_path_entry.place(x=250, y=390)
 
-        #Text box
-        self.dir_path_entry =  Entry(self.pack_top, width = 25, font = ('arial 12'))
-        self.dir_path_entry.place(x=250, y=345)
+            self.speci_enter_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_column_if_csv)
+            self.speci_enter_button.place(x=500, y=390)
 
-        self.speci_enter_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.s_directory)
-        self.speci_enter_button.place(x=500, y=345)
+            
+
+        else:
+            self.dir= Label(self.pack_top, text = "Input the directory path:", font = ('arial 12 bold'))
+            self.dir.place(x=25, y=345)
+            
+            self.dir_path_entry =  Entry(self.pack_top, width = 25, font = ('arial 12'))
+            self.dir_path_entry.place(x=250, y=345)
+            
+            self.speci_enter_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.s_directory)
+            self.speci_enter_button.place(x=500, y=345)
 
     def gen_directory(self):
-        directory = os.getcwd()+'\Output'
+        
+        if self.file_t_choice[-1] == 'csv':
+            self.check_column_if_csv()
 
-        if not os.path.exists(os.getcwd()+'\Output'):
-            os.makedirs(os.getcwd()+'\Output')
+            #self.cert_gen_speaker(directory)
 
-        self.cert_gen_speaker(directory)
+        else:
+            directory = os.getcwd()+'\Output'
+            if not os.path.exists(os.getcwd()+'\Output'):
+                os.makedirs(os.getcwd()+'\Output')
+
+            self.cert_gen_speaker(directory)
 
     def s_directory(self):
 
         directory = self.dir_path_entry.get()
         self.cert_gen_speaker(directory)
+
+    def check_column_if_csv(self):
+        
+        self.column_excel= Label(self.pack_top, text = "Input the column name:", font = ('arial 12 bold'))
+        self.column_excel.place(x=25, y=345)
+
+        self.column_excel_entry =  Entry(self.pack_top, width = 25, font = ('arial 12'))
+        self.column_excel_entry.place(x=250, y=345)
+
+        self.column_excel_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_if_column_exist)
+        self.column_excel_button.place(x=500, y=345)
+
+    def check_if_column_exist(self):
+        
+        file_name = self.f_n[-1]
+        column_name = self.column_excel_entry.get()
+        df = pd.read_csv("{}.csv".format(file_name))
+
+        #try:
+        if '{}'.format(column_name) in df:
+            directory = os.getcwd()+'\Output'
+            if not os.path.exists(os.getcwd()+'\Output'):
+                os.makedirs(os.getcwd()+'\Output')
+            self.cert_gen_speaker(directory)
+        else:
+            tkinter.messagebox.showinfo('Error',"Either you don't have input or the column name does not exist")
+                
+        #except:
+            #tkinter.messagebox.showinfo('Error',"error")
+            
+        
 
     def cert_gen_speaker(self,directory):
 
@@ -346,12 +390,13 @@ class Names():
         listbox.pack()
 
         if file_type_choice == 'csv':
+            column_name = self.column_excel_entry.get()
             df = pd.read_csv("{}.csv".format(file_name))
             for index, row in df.iterrows():
                 img = Image.open("{}.{}".format(template_fn,image_type))
                 draw = ImageDraw.Draw(img)
-                name = row['Name']
-                draw.text(xy=(final_x, final_y), text='{}'.format(row['Name']), fill=(0, 0, 0),
+                name = row['{}'.format(column_name)]
+                draw.text(xy=(final_x, final_y), text='{}'.format(name), fill=(0, 0, 0),
                           font=ImageFont.truetype("{}.ttf".format(font_style), font_size), anchor='mm')
                 if not os.path.exists(directory):
                     os.makedirs(directory)
@@ -393,7 +438,7 @@ class Names():
 
 window = Tk()
 main = Names(window)
-window.geometry("963x500+540+110")
+window.geometry("963x600+540+110")
 window.title("Certificate Generator")
 window.resizable(width=False, height=False)
 window.mainloop()
