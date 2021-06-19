@@ -15,7 +15,6 @@ class Names():
         self.font_n = []
         self.font_s = []
         self.img_type_choice = []
-        self.file_t_choice = []
 
         self.x_coor = []
         self.y_coor = []
@@ -47,25 +46,9 @@ class Names():
         self.search_file_button = Button(master, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_excel_file)
         self.search_file_button.place(x=630, y=75)
 
-        file_type_choices = ['csv','txt']
-        self.file_type_choice = ttk.Combobox(master, value = file_type_choices,width =10)
-        self.file_type_choice.current(0)
-        self.file_type_choice.bind("<<ComboboxSelected>>", self.combo_click1)
-        self.file_type_choice.place(x=730, y=75)
-        self.file_t_choice.append('csv')
-        
-    def combo_click1(self,file_type_choice):
-        if self.file_type_choice.get() == 'txt':
-            self.file_t_choice.append('txt')
-            print("txt")
-        else:
-            self.file_t_choice.append('csv')
-            print("csv")
-
     def check_excel_file(self):
         
         file_name = self.excelfile_entry.get()
-        file_type_choice = self.file_t_choice[-1]
         
         invalid_characters = ['/',':','?','<','>','|','\\']
         invalid_char_input = []
@@ -78,22 +61,15 @@ class Names():
             tkinter.messagebox.showinfo('Error',"A file name can't contain any of the ff characters: \ / : ? > < | ")
             invalid_char_input.clear()
         else: invalid_char_input.clear()
-
-        if file_type_choice == 'csv':
-            try:
-                df = pd.read_csv("{}.csv".format(file_name))
-                self.f_n.append(file_name) #Appending to list
-                self.show_template_button() #Showing the template objects
-            except IOError as e:
-                tkinter.messagebox.showinfo('Error',e)
-        else:
-            try:
-                with open("{}.txt".format(file_name), 'r') as file:
-                    self.f_n.append(file_name)
-                    self.show_template_button()
-            except IOError as e:
-                tkinter.messagebox.showinfo('Error',e)
                 
+        try:
+            df = pd.read_csv("{}.csv".format(file_name))
+            self.f_n.append(file_name) #Appending to list
+            self.show_template_button() #Showing the template objects
+                
+        except IOError as e:
+            open_file_flag = False
+            tkinter.messagebox.showinfo('Error',e)
 
             
     def show_template_button(self):
@@ -115,11 +91,11 @@ class Names():
         img_type = ['jpg','PNG']
         self.img_type_choices = ttk.Combobox(self.pack_top, value = img_type,width =10)
         self.img_type_choices.current(0)
-        self.img_type_choices.bind("<<ComboboxSelected>>", self.combo_click2)
+        self.img_type_choices.bind("<<ComboboxSelected>>", self.combo_click)
         self.img_type_choices.place(x=600, y=123)
         self.img_type_choice.append('jpg')
 
-    def combo_click2(self,img_type_choices):
+    def combo_click(self,img_type_choices):
         if self.img_type_choices.get() == 'jpg':
             self.img_type_choice.append('jpg')
             print("jpg")
@@ -313,18 +289,18 @@ class Names():
     def cert_gen_speaker(self,directory):
 
         file_name = self.f_n[-1]
-        file_type_choice = self.file_t_choice[-1]
         template_fn = self.t_n[-1]
         font_style = self.font_n[-1]
         font_size = int(self.font_s[-1])
         image_type = self.img_type_choice[-1]
-
 
         if image_type == 'jpg':
             format_saving = 'JPEG'
         else:
             format_saving = 'PNG'
             
+        
+
         
         final_x = self.x_coor[-1]
         final_y = self.y_coor[-1]
@@ -345,47 +321,28 @@ class Names():
 
         listbox.pack()
 
-        if file_type_choice == 'csv':
-            df = pd.read_csv("{}.csv".format(file_name))
-            for index, row in df.iterrows():
-                img = Image.open("{}.{}".format(template_fn,image_type))
-                draw = ImageDraw.Draw(img)
-                name = row['Name']
-                draw.text(xy=(final_x, final_y), text='{}'.format(row['Name']), fill=(0, 0, 0),
-                          font=ImageFont.truetype("{}.ttf".format(font_style), font_size), anchor='mm')
-                if not os.path.exists(directory):
-                    os.makedirs(directory)
-                img.save("{}/{}.jpg".format(directory, name), format= '{}'.format(format_saving))
-                img.close()
-                msg = "Appreciation certificate successfully saved, Filename: {} at {}".format(name, directory)
-                print("Appreciation certificate successfully saved, Filename: {} at {}".format(name, directory))
-                listbox.insert(END,msg)
-                self.pack_bottom.update_idletasks()
-                print("\n")
-        else:
-            list_of_names = []
-            with open("{}.txt".format(file_name), 'r') as file:
-                lines = [name.strip() for name in file.readlines()]
-                for l in lines:
-                    if l == "":
-                        pass
-                    else:
-                        list_of_names.append(l)
-                for f in list_of_names:
-                    img = Image.open("{}.{}".format(template_fn,image_type))
-                    draw = ImageDraw.Draw(img)
-                    draw.text(xy=(final_x, final_y), text='{}'.format(f), fill=(0, 0, 0),
-                              font=ImageFont.truetype("{}.ttf".format(font_style), font_size), anchor='mm')
-                    if not os.path.exists(directory):
-                        os.makedirs(directory)
-                    img.save("{}/{}.jpg".format(directory, f), format= '{}'.format(format_saving))
-                    img.close()
-                    msg = "Appreciation certificate successfully saved, Filename: {} at {}".format(f, directory)
-                    print("Appreciation certificate successfully saved, Filename: {} at {}".format(f, directory))
-                    listbox.insert(END,msg)
-                    self.pack_bottom.update_idletasks()
-                    print("\n")
+        df = pd.read_csv("{}.csv".format(file_name))
+        for index, row in df.iterrows():
+            img = Image.open("{}.{}".format(template_fn,image_type))
             
+            
+            draw = ImageDraw.Draw(img)
+            name = row['Name']
+    
+            draw.text(xy=(final_x, final_y), text='{}'.format(row['Name']), fill=(0, 0, 0),
+                      font=ImageFont.truetype("{}.ttf".format(font_style), font_size), anchor='mm')
+        
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+                
+            img.save("{}/{}.jpg".format(directory, name), format= '{}'.format(format_saving))
+            img.close()
+            msg = "Appreciation certificate successfully saved, Filename: {} at {}".format(name, directory)
+            print("Appreciation certificate successfully saved, Filename: {} at {}".format(name, directory))
+            listbox.insert(END,msg)
+            self.pack_bottom.update_idletasks()
+ 
+            print("\n")
 
 
 #def create_cert(self,window):
