@@ -66,29 +66,35 @@ class Names():
             print("csv")
             
     def browseFiles(self):
-        self.search_file_button.destroy()
-        self.file_type_choice.destroy()
-        self.search_browse_button.place(x=590, y=75)
         
         filename = filedialog.askopenfilename(initialdir = "/",
                                           title = "Select a File",
-                                          filetypes = (("text files",
-                                                        "*.txt*"),
-                                                       ("csv files",
-                                                        "*.csv*")))
-        file_path = os.path.splitext(filename)[0]
-        file_name = file_path.split('/')[-1]
-        self.f_n.append(file_name)
-        print(file_name)
+                                          filetypes = (("csv files",
+                                                        "*.csv*"),
+                                                       ("text files",
+                                                        "*.txt*")))
+
+        try:
+            self.excelfile_entry.delete(0,END)
+        except: pass
         
-        file_ext = os.path.splitext(filename)[1]
-        final_ext = file_ext.split('.')[-1]
-        self.file_t_choice.append(final_ext)
-        print(final_ext)
+        if len(filename) == 0:
+            tkinter.messagebox.showinfo('Error',"You haven't selected any file upon browsing")
+            print(self.file_t_choice)
 
-
-        self.excelfile_entry.insert(0, "{}".format(filename))
-        self.show_template_button()
+        else:
+            file_path = os.path.splitext(filename)[0]
+            file_name = file_path.split('/')[-1]
+            self.f_n.append(file_name)
+            print(file_name)
+        
+            file_ext = os.path.splitext(filename)[1]
+            final_ext = file_ext.split('.')[-1]
+            self.file_t_choice.append(final_ext)
+            print(final_ext)
+            
+            self.excelfile_entry.insert(0, "{}".format(filename))
+            self.show_template_button()
 
         
         #print(os.path.basename(filename)) 
@@ -174,6 +180,40 @@ class Names():
         self.img_type_choices.bind("<<ComboboxSelected>>", self.combo_click2)
         self.img_type_choices.place(x=592, y=123)
         self.img_type_choice.append('jpg')
+
+        self.search_browse_button2 = Button(self.pack_top, text = "Browse", width = 10, height = 1, bg = 'green', fg='white', command = self.browseFilesTemplate)
+        self.search_browse_button2.place(x=767, y=120)
+
+    def browseFilesTemplate(self):
+        filename = filedialog.askopenfilename(initialdir = "/",
+                                          title = "Select a File",
+                                          filetypes = (("JPEG",
+                                                        "*.jpg*"),
+                                                       ("PNG",
+                                                        "*.PNG*")))
+        try:
+            self.tempfile_entry.delete(0,END)
+        except: pass
+
+        if len(filename) == 0:
+            tkinter.messagebox.showinfo('Error',"You haven't selected any file upon browsing")
+
+        else:
+            
+            file_path = os.path.splitext(filename)[0]
+            file_name = file_path.split('/')[-1]
+            self.t_n.append(file_name)
+            print(file_name)
+        
+            file_ext = os.path.splitext(filename)[1]
+            final_ext = file_ext.split('.')[-1]
+            self.img_type_choice.append(final_ext)
+            print(final_ext)
+
+
+            self.tempfile_entry.insert(0, "{}".format(filename))
+            self.show_font_style_button()
+
 
     def combo_click2(self,img_type_choices):
         if self.img_type_choices.get() == 'jpg':
