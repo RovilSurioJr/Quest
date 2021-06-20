@@ -320,7 +320,7 @@ class Names():
             self.dir_path_entry1 =  Entry(self.pack_top, width = 25, font = ('arial 12'))
             self.dir_path_entry1.place(x=250, y=345)
 
-            self.speci_enter_button1 = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_column_if_csv)
+            self.speci_enter_button1 = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_specify_path_entry)
             self.speci_enter_button1.place(x=500, y=345)
 
             
@@ -332,8 +332,22 @@ class Names():
             self.dir_path_entry =  Entry(self.pack_top, width = 25, font = ('arial 12'))
             self.dir_path_entry.place(x=250, y=345)
             
-            self.speci_enter_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.s_directory)
+            self.speci_enter_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_specify_path_entry)
             self.speci_enter_button.place(x=500, y=345)
+
+    def check_specify_path_entry(self):
+        if self.file_t_choice[-1] == 'txt':
+            if self.dir_path_entry.get() != '':
+                self.s_directory()
+            else:
+                tkinter.messagebox.showinfo('Error',"Please input a directory path")
+        else:
+            if self.dir_path_entry1.get() != '':
+                self.check_column_if_csv()
+            else:
+                tkinter.messagebox.showinfo('Error',"Please input a directory path")
+                
+        
 
     def gen_directory(self):
         
@@ -357,7 +371,6 @@ class Names():
 
     def check_column_if_csv(self):
         
-
         if self.generate == True:
             self.column_excel= Label(self.pack_top, text = "Input the column name:", font = ('arial 12 bold'))
             self.column_excel.place(x=25, y=345)
@@ -413,10 +426,6 @@ class Names():
                 self.cert_gen_speaker(directory)
         else:
             tkinter.messagebox.showinfo('Error',"Either you don't have input or the column name does not exist")
-                
-        #except:
-            #tkinter.messagebox.showinfo('Error',"error")
-
 
     def cert_gen_speaker(self,directory):
 
