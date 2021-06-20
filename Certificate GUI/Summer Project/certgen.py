@@ -4,6 +4,7 @@ import tkinter.messagebox
 from PIL import Image, ImageFont, ImageDraw
 import pandas as pd
 import os
+from tkinter import filedialog
 
 
 
@@ -23,7 +24,7 @@ class Names():
         self.generate = False
         self.widget_column_name_exist = False
 
-        self.pack_top = Frame(master, width=700, height=450 ,bg = 'white')
+        self.pack_top = Frame(master, width=963, height=450 ,bg = 'white')
         self.pack_top.pack(side=TOP)
         
         self.pack_bottom = Frame(master, width=700, height=400) 
@@ -35,26 +36,25 @@ class Names():
         self.heading.place(x=375,y=0)
 
         #Text
-
         self.excelfile= Label(master, text = "Input source filename:", font = ('arial 12 bold'))
-        self.excelfile.place(x=155, y=75)
+        self.excelfile.place(x=120, y=75)
 
         #Text box
-
         self.excelfile_entry =  Entry(master, width = 25, font = ('arial 12 '))
-        self.excelfile_entry.place(x=380, y=75)
-
+        self.excelfile_entry.place(x=340, y=75)
 
         #Button
-
         self.search_file_button = Button(master, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_excel_file)
-        self.search_file_button.place(x=630, y=75)
+        self.search_file_button.place(x=680, y=72)
+
+        self.search_browse_button = Button(master, text = "Browse", width = 10, height = 1, bg = 'green', fg='white', command = self.browseFiles)
+        self.search_browse_button.place(x=767, y=72)
 
         file_type_choices = ['csv','txt']
         self.file_type_choice = ttk.Combobox(master, value = file_type_choices,width =10)
         self.file_type_choice.current(0)
         self.file_type_choice.bind("<<ComboboxSelected>>", self.combo_click1)
-        self.file_type_choice.place(x=730, y=75)
+        self.file_type_choice.place(x=590, y=75)
         self.file_t_choice.append('csv')
         
     def combo_click1(self,file_type_choice):
@@ -64,6 +64,34 @@ class Names():
         else:
             self.file_t_choice.append('csv')
             print("csv")
+            
+    def browseFiles(self):
+        self.search_file_button.destroy()
+        self.file_type_choice.destroy()
+        self.search_browse_button.place(x=590, y=75)
+        
+        filename = filedialog.askopenfilename(initialdir = "/",
+                                          title = "Select a File",
+                                          filetypes = (("text files",
+                                                        "*.txt*"),
+                                                       ("csv files",
+                                                        "*.csv*")))
+        file_path = os.path.splitext(filename)[0]
+        file_name = file_path.split('/')[-1]
+        self.f_n.append(file_name)
+        print(file_name)
+        
+        file_ext = os.path.splitext(filename)[1]
+        final_ext = file_ext.split('.')[-1]
+        self.file_t_choice.append(final_ext)
+        print(final_ext)
+
+
+        self.excelfile_entry.insert(0, "{}".format(filename))
+        self.show_template_button()
+
+        
+        #print(os.path.basename(filename)) 
 
     def check_excel_file(self):
         
@@ -128,23 +156,23 @@ class Names():
 
         #Text
         self.tempfile= Label(self.pack_top, text = "Input template filename:", font = ('arial 12 bold'))
-        self.tempfile.place(x=25, y=120)
+        self.tempfile.place(x=120, y=120)
 
         #Text box
 
         self.tempfile_entry =  Entry(self.pack_top, width = 25, font = ('arial 12 '))
-        self.tempfile_entry.place(x=250, y=120)
+        self.tempfile_entry.place(x=340, y=120)
 
         #Button
 
         self.enter_file_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_template_file)
-        self.enter_file_button.place(x=500, y=120)
+        self.enter_file_button.place(x=680, y=120)
 
         img_type = ['jpg','PNG']
         self.img_type_choices = ttk.Combobox(self.pack_top, value = img_type,width =10)
         self.img_type_choices.current(0)
         self.img_type_choices.bind("<<ComboboxSelected>>", self.combo_click2)
-        self.img_type_choices.place(x=600, y=123)
+        self.img_type_choices.place(x=592, y=123)
         self.img_type_choice.append('jpg')
 
     def combo_click2(self,img_type_choices):
@@ -184,17 +212,17 @@ class Names():
     def show_font_style_button(self):
 
         self.f_style= Label(self.pack_top, text = "Input font style filename:", font = ('arial 12 bold'))
-        self.f_style.place(x=25, y=165)
+        self.f_style.place(x=120, y=165)
 
         #Text box
 
         self.f_style_entry =  Entry(self.pack_top, width = 25, font = ('arial 12 '))
-        self.f_style_entry.place(x=250, y=165)
+        self.f_style_entry.place(x=340, y=165)
 
         #Button
 
         self.f_style_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.font_style_choice)
-        self.f_style_button.place(x=500, y=165)
+        self.f_style_button.place(x=590, y=165)
            
     def font_style_choice(self):
         
@@ -222,17 +250,17 @@ class Names():
 
     def show_font_size_button(self):
         self.f_size= Label(self.pack_top, text = "Input font size(pixel):", font = ('arial 12 bold'))
-        self.f_size.place(x=25, y=210)
+        self.f_size.place(x=120, y=210)
 
         #Text box
 
         self.f_size_entry =  Entry(self.pack_top, width = 25, font = ('arial 12 '))
-        self.f_size_entry.place(x=250, y=210)
+        self.f_size_entry.place(x=340, y=210)
 
         #Button
 
         self.f_size_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.font_size_c)
-        self.f_size_button.place(x=500, y=210)
+        self.f_size_button.place(x=590, y=210)
 
     def font_size_c(self):
         font_s = self.f_size_entry.get()
@@ -256,9 +284,9 @@ class Names():
         image_type = self.img_type_choice[-1]
         
         self.img_s= Label(self.pack_top, text = "X & Y for placement of names:", font = ('arial 12 bold'))
-        self.img_s.place(x=25, y=255)
+        self.img_s.place(x=120, y=255)
         self.img_sz_note= Label(self.pack_top, text = "*The default is at center of the image", font = ('arial 9 italic'))
-        self.img_sz_note.place(x=267, y=275)
+        self.img_sz_note.place(x=350, y=275)
 
         img = Image.open("{}.{}".format(speaker_fn,image_type))
         lxw = img.size
@@ -266,15 +294,15 @@ class Names():
         width = lxw[1] //2
         
         self.X_val_entry =  Entry(self.pack_top, width = 6, font = ('arial 12'))
-        self.X_val_entry.place(x=300, y=255)
+        self.X_val_entry.place(x=390, y=255)
         self.X_val_entry.insert(0, "{}".format(length))
 
         self.Y_val_entry =  Entry(self.pack_top, width = 6, font = ('arial 12'))
-        self.Y_val_entry.place(x=380, y=255)
+        self.Y_val_entry.place(x=480, y=255)
         self.Y_val_entry.insert(0, "{}".format(width))
 
         self.proceed_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_coordinates_input )
-        self.proceed_button.place(x=500, y=255)
+        self.proceed_button.place(x=590, y=255)
 
 
     def check_coordinates_input(self):
@@ -300,40 +328,40 @@ class Names():
         #Text
 
         self.dir= Label(self.pack_top, text = "Output Directory:", font = ('arial 12 bold'))
-        self.dir.place(x=25, y=300)
+        self.dir.place(x=120, y=300)
 
         #Button
 
         self.speci_file_button = Button(self.pack_top, text = "Specify", width = 10, height = 1, bg = 'green', fg='white', command = self.specify_dir)
-        self.speci_file_button.place(x=250, y=300)
+        self.speci_file_button.place(x=390, y=300)
 
         self.gen_file_button = Button(self.pack_top, text = "Generate", width = 10, height = 1, bg = 'green', fg='white', command = self.gen_directory)
-        self.gen_file_button.place(x=400, y=300)
+        self.gen_file_button.place(x=480, y=300)
 
     def specify_dir(self):
 
         if self.file_t_choice[-1] == 'csv':
             self.generate = False
             self.dir1= Label(self.pack_top, text = "Input the directory path:", font = ('arial 12 bold'))
-            self.dir1.place(x=25, y=345)
+            self.dir1.place(x=120, y=345)
 
             self.dir_path_entry1 =  Entry(self.pack_top, width = 25, font = ('arial 12'))
-            self.dir_path_entry1.place(x=250, y=345)
+            self.dir_path_entry1.place(x=340, y=345)
 
             self.speci_enter_button1 = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_specify_path_entry)
-            self.speci_enter_button1.place(x=500, y=345)
+            self.speci_enter_button1.place(x=590, y=345)
 
             
 
         else:
             self.dir= Label(self.pack_top, text = "Input the directory path:", font = ('arial 12 bold'))
-            self.dir.place(x=25, y=345)
+            self.dir.place(x=120, y=345)
             
             self.dir_path_entry =  Entry(self.pack_top, width = 25, font = ('arial 12'))
-            self.dir_path_entry.place(x=250, y=345)
+            self.dir_path_entry.place(x=340, y=345)
             
             self.speci_enter_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_specify_path_entry)
-            self.speci_enter_button.place(x=500, y=345)
+            self.speci_enter_button.place(x=590, y=345)
 
     def check_specify_path_entry(self):
         if self.file_t_choice[-1] == 'txt':
@@ -354,9 +382,7 @@ class Names():
         if self.file_t_choice[-1] == 'csv':
             self.generate = True
             self.check_column_if_csv()
-
-            #self.cert_gen_speaker(directory)
-
+            
         else:
             directory = os.getcwd()+'\Output'
             if not os.path.exists(os.getcwd()+'\Output'):
@@ -373,13 +399,13 @@ class Names():
         
         if self.generate == True:
             self.column_excel= Label(self.pack_top, text = "Input the column name:", font = ('arial 12 bold'))
-            self.column_excel.place(x=25, y=345)
+            self.column_excel.place(x=120, y=345)
 
             self.column_excel_entry =  Entry(self.pack_top, width = 25, font = ('arial 12'))
-            self.column_excel_entry.place(x=250, y=345)
+            self.column_excel_entry.place(x=340, y=345)
 
             self.column_excel_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_if_column_exist)
-            self.column_excel_button.place(x=500, y=345)
+            self.column_excel_button.place(x=590, y=345)
 
             print("self.widget_column_name_exist:",self.widget_column_name_exist)
             
@@ -393,13 +419,13 @@ class Names():
             self.widget_column_name_exist = True
         
             self.column_excel2= Label(self.pack_top, text = "Input the column name:", font = ('arial 12 bold'))
-            self.column_excel2.place(x=25, y=390)
+            self.column_excel2.place(x=120, y=390)
 
             self.column_excel_entry2 =  Entry(self.pack_top, width = 25, font = ('arial 12'))
-            self.column_excel_entry2.place(x=250, y=390)
+            self.column_excel_entry2.place(x=340, y=390)
 
             self.column_excel_button2 = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_if_column_exist)
-            self.column_excel_button2.place(x=500, y=390)
+            self.column_excel_button2.place(x=590, y=390)
 
     def check_if_column_exist(self):
         
@@ -430,7 +456,7 @@ class Names():
     def cert_gen_speaker(self,directory):
 
         self.destroy_output_screen_but = Button(self.pack_top, text = "Clear Output screen", width = 20, height = 1, bg = 'green', fg='white', command = self.destroy_listbox)
-        self.destroy_output_screen_but.place(x=278, y=420)
+        self.destroy_output_screen_but.place(x=400, y=420)
 
         file_name = self.f_n[-1]
         file_type_choice = self.file_t_choice[-1]
