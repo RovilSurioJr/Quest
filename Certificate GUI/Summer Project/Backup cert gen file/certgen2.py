@@ -282,15 +282,18 @@ class Names():
 
     def specify_dir(self):
 
+        self.generate = False
+        self.widget_column_name_exist = False
+
         if self.file_t_choice[-1] == 'csv':
             self.dir= Label(self.pack_top, text = "Input the directory path:", font = ('arial 12 bold'))
-            self.dir.place(x=25, y=390)
+            self.dir.place(x=25, y=345)
 
             self.dir_path_entry =  Entry(self.pack_top, width = 25, font = ('arial 12'))
-            self.dir_path_entry.place(x=250, y=390)
+            self.dir_path_entry.place(x=250, y=345)
 
             self.speci_enter_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_column_if_csv)
-            self.speci_enter_button.place(x=500, y=390)
+            self.speci_enter_button.place(x=500, y=345)
 
             
 
@@ -307,6 +310,7 @@ class Names():
     def gen_directory(self):
         
         if self.file_t_choice[-1] == 'csv':
+            self.generate = True
             self.check_column_if_csv()
 
             #self.cert_gen_speaker(directory)
@@ -325,19 +329,49 @@ class Names():
 
     def check_column_if_csv(self):
         
-        self.column_excel= Label(self.pack_top, text = "Input the column name:", font = ('arial 12 bold'))
-        self.column_excel.place(x=25, y=345)
 
-        self.column_excel_entry =  Entry(self.pack_top, width = 25, font = ('arial 12'))
-        self.column_excel_entry.place(x=250, y=345)
+        if self.generate == True:
+            self.column_excel= Label(self.pack_top, text = "Input the column name:", font = ('arial 12 bold'))
+            self.column_excel.place(x=25, y=345)
 
-        self.column_excel_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_if_column_exist)
-        self.column_excel_button.place(x=500, y=345)
+            self.column_excel_entry =  Entry(self.pack_top, width = 25, font = ('arial 12'))
+            self.column_excel_entry.place(x=250, y=345)
+
+            self.column_excel_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_if_column_exist)
+            self.column_excel_button.place(x=500, y=345)
+
+            print(self.widget_column_name_exist)
+            if self.widget_column_name_exist == True:
+                self.column_excel2.destroy()
+                self.column_excel_entry2.destroy()
+                self.column_excel_button2.destroy()
+
+        else:
+            #if self.widget_column_name_exist == True:
+                #self.column_excel.destroy()
+                #self.column_excel_entry.destroy()
+                #self.column_excel_button.destroy()
+
+
+            self.widget_column_name_exist = True
+        
+            self.column_excel2= Label(self.pack_top, text = "Input the column name:", font = ('arial 12 bold'))
+            self.column_excel2.place(x=25, y=390)
+
+            self.column_excel_entry2 =  Entry(self.pack_top, width = 25, font = ('arial 12'))
+            self.column_excel_entry2.place(x=250, y=390)
+
+            self.column_excel_button2 = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_if_column_exist)
+            self.column_excel_button2.place(x=500, y=390)
 
     def check_if_column_exist(self):
         
         file_name = self.f_n[-1]
-        column_name = self.column_excel_entry.get()
+
+        if self.generate == True:
+            column_name = self.column_excel_entry.get()
+        else:
+            column_name = self.column_excel_entry2.get()
         df = pd.read_csv("{}.csv".format(file_name))
 
         #try:
@@ -351,7 +385,7 @@ class Names():
                 
         #except:
             #tkinter.messagebox.showinfo('Error',"error")
-            
+
         
 
     def cert_gen_speaker(self,directory):
@@ -372,8 +406,7 @@ class Names():
         
         final_x = self.x_coor[-1]
         final_y = self.y_coor[-1]
-
-
+        
         scroll_barY = Scrollbar(self.pack_bottom,orient=VERTICAL)
         scroll_barX = Scrollbar(self.pack_bottom,orient=HORIZONTAL)
         
@@ -390,7 +423,10 @@ class Names():
         listbox.pack()
 
         if file_type_choice == 'csv':
-            column_name = self.column_excel_entry.get()
+            if self.generate == True:
+                column_name = self.column_excel_entry.get()
+            else:
+                column_name = self.column_excel_entry2.get()
             df = pd.read_csv("{}.csv".format(file_name))
             for index, row in df.iterrows():
                 img = Image.open("{}.{}".format(template_fn,image_type))
@@ -404,7 +440,9 @@ class Names():
                 img.close()
                 msg = "Appreciation certificate successfully saved, Filename: {} at {}".format(name, directory)
                 print("Appreciation certificate successfully saved, Filename: {} at {}".format(name, directory))
+                
                 listbox.insert(END,msg)
+                    
                 self.pack_bottom.update_idletasks()
                 print("\n")
         else:
