@@ -263,6 +263,33 @@ class Names():
 
         self.f_style_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.font_style_choice)
         self.f_style_button.place(x=590, y=165)
+
+
+        self.search_browse_button3 = Button(self.pack_top, text = "Browse", width = 10, height = 1, bg = 'green', fg='white', command = self.browseFilesFont)
+        self.search_browse_button3.place(x=680, y=165)
+
+    
+    def browseFilesFont(self):
+        filename = filedialog.askopenfilename(initialdir = "/",
+                                          title = "Select a File",
+                                          filetypes = [("TTF",
+                                                        "*.ttf*")])
+        try:
+            self.f_style_entry.delete(0,END)
+        except: pass
+
+        if len(filename) == 0:
+            tkinter.messagebox.showinfo('Error',"You haven't selected any file upon browsing")
+
+        else:
+            
+            file_path = os.path.splitext(filename)[0]
+            file_name = file_path.split('/')[-1]
+            self.font_n.append(file_name)
+            print(file_name)
+        
+            self.f_style_entry.insert(0, "{}".format(filename))
+            self.show_font_size_button()
            
     def font_style_choice(self):
         
