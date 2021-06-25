@@ -139,6 +139,7 @@ class Names():
                             self.dir1.destroy()
                             self.dir_path_entry1.destroy()
                             self.speci_enter_button1.destroy()
+                            self.locate_folder_button.destroy()
                             self.column_excel.destroy()
                             self.column_excel_entry.destroy()
                             self.column_excel_button.destroy()
@@ -418,6 +419,9 @@ class Names():
             self.speci_enter_button1 = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_specify_path_entry)
             self.speci_enter_button1.place(x=590, y=345)
 
+            self.locate_folder_button = Button(self.pack_top, text = "Browse", width = 10, height = 1, bg = 'green', fg='white', command = self.locate_folder_dir)
+            self.locate_folder_button.place(x=680, y=345)
+
             
 
         else:
@@ -429,6 +433,17 @@ class Names():
             
             self.speci_enter_button = Button(self.pack_top, text = "Enter", width = 10, height = 1, bg = 'green', fg='white', command = self.check_specify_path_entry)
             self.speci_enter_button.place(x=590, y=345)
+
+            self.locate_folder_button1 = Button(self.pack_top, text = "Browse", width = 10, height = 1, bg = 'green', fg='white', command = self.locate_folder_dir)
+            self.locate_folder_button1.place(x=680, y=345)
+
+    def locate_folder_dir(self):
+        folder_selected = filedialog.askdirectory()
+        try:
+            self.dir_path_entry1.insert(0, "{}".format(folder_selected))
+        except:
+            self.dir_path_entry.insert(0, "{}".format(folder_selected))
+            
 
     def check_specify_path_entry(self):
         if self.file_t_choice[-1] == 'txt':
